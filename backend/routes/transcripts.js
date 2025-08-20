@@ -88,9 +88,29 @@ router.post('/upload', requireAuth, upload.single('audio'), async (req, res) => 
 });
 
 
-// --- Route to get the history (we'll implement it in the next step) ---
-router.get('/', requireAuth, (req, res) => {
-    res.send(`Transcript history for the user: ${req.user.email}. (Protected)`);
+// --- Route to get the user's transcript history ---
+// @route   GET /api/transcripts
+// @desc    Get all transcripts for the logged-in user, sorted by most recent
+// @access  Private
+router.get('/', requireAuth, async (req, res) => {
+    try {
+        // 1. Get the user ID from the JWT token
+        // Passport attaches the 'user' object to the request after authentication
+        const userId = req.user.id;
+
+        // 2. Search in the database
+        // Find all documents in the 'Transcript' collection
+        // where the 'userId' field matches the current user's ID.
+        const transcripts = await Transcript.find({ userId: userId })
+                                            .sort({ createdAt: -1 }); // Sort by creation date in descending order
+
+        // 3. Return the results
+        res.status(200).json(transcripts);
+
+    } catch (error) {
+        console.error('Error fetching transcript history:', error.message);
+        res.status(500).json({ message: 'Server error while fetching history.' });
+    }
 });
 
 module.exports = router;
