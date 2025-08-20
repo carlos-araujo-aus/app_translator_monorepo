@@ -1,0 +1,92 @@
+## 🔧 API Configuration
+
+The application connects to Deepgram's API with these settings:
+
+```javascript
+// API Endpoint
+https://api.deepgram.com/v1/listen
+
+// Parameters
+?model=nova-2&punctuate=true&smart_format=true&detect_language=true&filler_words=true
+```
+
+## 🔒 Security
+
+- ✅ API keys stored in environment variables
+- ✅ No sensitive data in source code
+- ✅ Secure file path handling
+- ✅ Input validation for audio files
+- ✅ `.env` file excluded from version control
+
+## 🚨 Error Handling
+
+The app handles common scenarios:
+
+- **No audio files found**: Clear error message
+- **Invalid API key**: Authentication error
+- **Network issues**: Timeout and retry logic
+- **Unsupported formats**: File type validation
+- **Large files**: Size limit warnings
+
+## 📋 Dependencies
+
+```json
+{
+  "axios": "^1.x.x",      // HTTP client for API calls
+  "dotenv": "^16.x.x"     // Environment variable management
+}
+```
+
+## 🎯 Use Cases
+
+- 📝 **Meeting Transcriptions** - Convert recorded meetings to text
+- 🎓 **Lecture Notes** - Transcribe educational content
+- 🎤 **Interview Processing** - Convert interviews to searchable text
+- 📻 **Podcast Transcripts** - Generate episode transcripts
+- 🔊 **Voice Memos** - Convert voice notes to text
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Troubleshooting
+
+### Common Issues
+
+**"No audio files found"**
+- Ensure audio file is in the project root directory
+- Check file extension is supported
+
+**"API key not found"**
+- Verify `.env` file exists and contains `DEEPGRAM_API_KEY`
+- Check API key is valid and active
+
+**"Request timeout"**
+- File may be too large (max 25MB)
+- Check internet connection
+
+### Getting Help
+
+- 📖 [Deepgram Documentation](https://developers.deepgram.com/)
+- 🐛 [Report Issues](https://github.com/yourusername/translator-node/issues)
+- 💬 [Discussions](https://github.com/yourusername/translator-node/discussions)
+
+## 🌟 Acknowledgments
+
+- [Deepgram](https://deepgram.com/) for the excellent speech-to-text API
+- [Axios](https://axios-http.com/) for HTTP client
+- [dotenv](https://github.com/motdotla/dotenv) for environment management
+
+---
+
+**Made with ❤️ and Node.js**
+
+*Happy transcribing! 🎵➡️📝*
