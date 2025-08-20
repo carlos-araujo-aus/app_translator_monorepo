@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const passport = require('./config/passport');
+const authRoutes = require('./routes/auth');
 
 // 2. Initialize the App
 const app = express();
@@ -29,10 +30,12 @@ mongoose.connect(mongoUri)
         process.exit(1);
     });
 
-// 5. Routes (we'll add them later)
+// 5. Routes
 app.get('/', (req, res) => {
     res.send('Welcome to the Transcription API Backend!');
 });
+
+app.use('/api/auth', authRoutes); // <-- AÑADIR ESTA LÍNEA
 
 // 6. Start the Server
 app.listen(PORT, () => {
