@@ -3,6 +3,7 @@ require('dotenv').config(); // load the environment variables from .env
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const passport = require('./config/passport');
 
 // 2. Initialize the App
 const app = express();
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors()); // Allow requests from other origins (our frontend)
 app.use(express.json()); // Allow the server to understand JSON
 app.use(express.urlencoded({ extended: true })); // Allow the server to understand form data
+app.use(passport.initialize()); // Initialize passport 
 
 // 4. Connect to the Database
 const mongoUri = process.env.MONGO_URI;
