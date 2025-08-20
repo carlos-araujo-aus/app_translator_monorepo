@@ -1,11 +1,11 @@
 const fs = require('fs');
 const axios = require('axios');
 
-const DEEPGRAM_API_URL = "https://api.deepgram.com/v1/listen";
+const DEEPGRAM_API_URL = process.env.DEEPGRAM_API_URL;
 const DEEPGRAM_API_KEY = process.env.DEEPGRAM_API_KEY;
 
 const transcribeAudio = async (filePath) => {
-    if (!DEEPGRAM_API_KEY) {
+    if (!DEEPGRAM_API_KEY || !DEEPGRAM_API_URL) {
         throw new Error('DEEPGRAM_API_KEY is not configured.');
     }
 
