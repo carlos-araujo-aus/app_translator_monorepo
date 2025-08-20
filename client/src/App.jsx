@@ -2,29 +2,27 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
-// (We'll create these components in the next steps)
-// import NavigationBar from './components/NavigationBar';
-// import LoginPage from './pages/LoginPage';
-// import RegisterPage from './pages/RegisterPage';
-// import DashboardPage from './pages/DashboardPage';
-// import HistoryPage from './pages/HistoryPage';
-// import ProtectedRoute from './components/ProtectedRoute';
+// Import the pages we just created
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
+import HistoryPage from './pages/HistoryPage';
 
 function App() {
   return (
     <>
-      {/* <NavigationBar /> */}
+      {/* We will add the NavigationBar component here later */}
       <Container className="mt-4">
         <Routes>
           {/* Public Routes */}
-          <Route path="/login" element={<h1>Login Page Placeholder</h1>} />
-          <Route path="/register" element={<h1>Register Page Placeholder</h1>} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
           {/* Private Routes (we'll protect them later) */}
-          <Route path="/" element={<h1>Dashboard Page Placeholder</h1>} />
-          <Route path="/history" element={<h1>History Page Placeholder</h1>} />
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/history" element={<HistoryPage />} />
           
-          {/* Route for any other URL not found */}
+          {/* Catch-all route for 404 */}
           <Route path="*" element={<h1>404 - Page Not Found</h1>} />
         </Routes>
       </Container>
