@@ -16,7 +16,7 @@ const api = axios.create({
   This is a request interceptor. It's a function that runs BEFORE any request is sent.
   Here, we'll check if we have a token in localStorage, and if so,
   we'll add it to the Authorization header.
-*/
+*/  
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
