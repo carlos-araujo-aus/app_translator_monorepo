@@ -1,12 +1,11 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-
-// Import the pages we just created
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import HistoryPage from './pages/HistoryPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 // Imports

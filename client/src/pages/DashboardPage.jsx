@@ -1,11 +1,27 @@
-import React from 'react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Card, Alert } from 'react-bootstrap';
 
-// Import the new components
 import AudioUploader from '../components/AudioUploader';
 import AudioRecorder from '../components/AudioRecorder';
 
 const DashboardPage = () => {
+  // State to hold the latest transcription result
+  const [transcriptionResult, setTranscriptionResult] = useState(null);
+  const [error, setError] = useState('');
+
+  // This function will be passed down to the child components
+  const handleTranscriptionComplete = (transcript) => {
+      console.log("New transcription received in Dashboard:", transcript);
+      setTranscriptionResult(transcript);
+      setError(''); // Clear previous errors
+  };
+
+  // This function will be passed down to handle errors from children
+  const handleTranscriptionError = (errorMessage) => {
+      setError(errorMessage);
+      setTranscriptionResult(null); // Clear previous results
+  };
+
   return (
     <Container>
       <h1 className="my-4">Dashboard</h1>
@@ -18,7 +34,10 @@ const DashboardPage = () => {
               <Card.Text className="mb-3">
                 Select an audio file from your device (.mp3, .wav, .m4a, etc.).
               </Card.Text>
-              <AudioUploader />
+              <AudioUploader 
+                onTranscriptionComplete={handleTranscriptionComplete}
+                onTranscriptionError={handleTranscriptionError} // Pass error handler
+              />
             </Card.Body>
           </Card>
         </Col>
@@ -29,7 +48,11 @@ const DashboardPage = () => {
                <Card.Text className="mb-3">
                 Record a short audio clip directly from your microphone.
               </Card.Text>
-              <AudioRecorder />
+              {/* We will connect this component next */}
+              <AudioRecorder 
+                onTranscriptionComplete={handleTranscriptionComplete}
+                onTranscriptionError={handleTranscriptionError} // Pass error handler
+              />
             </Card.Body>
           </Card>
         </Col>
@@ -39,8 +62,13 @@ const DashboardPage = () => {
             <Card>
                 <Card.Body>
                     <Card.Title>Last Transcription Result</Card.Title>
-                    <div className="p-3 border rounded bg-light mt-2">
-                        <p className="text-muted">Your transcription result will appear here...</p>
+                    {error && <Alert variant="danger">{error}</Alert>}
+                    <div className="p-3 border rounded bg-light mt-2" style={{ minHeight: '100px' }}>
+                        {transcriptionResult ? (
+                            <p><strong>{transcriptionResult.originalFilename}:</strong> {transcriptionResult.transcribedText}</p>
+                        ) : (
+                            <p className="text-muted">Your transcription result will appear here...</p>
+                        )}
                     </div>
                 </Card.Body>
             </Card>

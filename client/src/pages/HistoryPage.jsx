@@ -1,34 +1,80 @@
-import React from 'react';
-import { Container, Card, Spinner } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Container, Card, Spinner, Alert, ListGroup } from 'react-bootstrap';
+import { getHistory } from '../services/api';
 
 const HistoryPage = () => {
-    // We will replace this with real data later
-    const isLoading = false;
-    // Example of what transcripts might look like
-    const transcripts = []; // An empty array to show the "no transcripts" message
+    const [transcripts, setTranscripts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
-    return (
-        <Container>
-            <h1 className="my-4">Transcription History</h1>
-            {isLoading ? (
+    useEffect(() => {
+        // This function will be called when the component mounts
+        const fetchHistory = async () => {
+            try {
+                setError('');
+                setLoading(true);
+                const response = await getHistory();
+                setTranscripts(response.data);
+            } catch (err) {
+                setError(err.response?.data?.message || 'Failed to fetch history.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHistory();
+    }, []); 
+
+    const renderContent = () => {
+        if (loading) {
+            return (
                 <div className="text-center">
                     <Spinner animation="border" role="status">
                         <span className="visually-hidden">Loading...</span>
                     </Spinner>
                 </div>
-            ) : transcripts.length === 0 ? (
+            );
+        }
+
+        if (error) {
+            return <Alert variant="danger">{error}</Alert>;
+        }
+
+        if (transcripts.length === 0) {
+            return (
                 <Card>
                     <Card.Body className="text-center text-muted">
                         You don't have any transcripts yet. Go to the dashboard to create your first one!
                     </Card.Body>
                 </Card>
-            ) : (
-                // This is where the list of transcripts will be rendered.
-                // We will use .map() on the transcripts array here.
-                <div>
-                    <p>Transcript list will be here.</p>
-                </div>
-            )}
+            );
+        }
+
+        return (
+            <ListGroup>
+                {transcripts.map((transcript) => (
+                    <ListGroup.Item key={transcript._id} className="mb-3 border rounded">
+                        <div className="d-flex w-100 justify-content-between">
+                            <h5 className="mb-1">{transcript.originalFilename}</h5>
+                            <small>{new Date(transcript.createdAt).toLocaleDateString()}</small>
+                        </div>
+                        <p className="mb-1">
+                            {transcript.transcribedText}
+                        </p>
+                        <small className="text-muted">
+                            Duration: {transcript.durationSeconds.toFixed(2)}s | 
+                            Confidence: {(transcript.confidence * 100).toFixed(1)}%
+                        </small>
+                    </ListGroup.Item>
+                ))}
+            </ListGroup>
+        );
+    };
+
+    return (
+        <Container>
+            <h1 className="my-4">Transcription History</h1>
+            {renderContent()}
         </Container>
     );
 };
