@@ -9,7 +9,7 @@ import DashboardPage from './pages/DashboardPage';
 import HistoryPage from './pages/HistoryPage';
 
 
-// Import the new component
+// Imports
 import NavigationBar from './components/NavigationBar';
 
 function App() {
@@ -23,8 +23,22 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
 
           {/* Private Routes (we'll protect them later) */}
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/history" element={<HistoryPage />} />
+          <Route 
+            path="/" 
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/history" 
+            element={
+              <ProtectedRoute>
+                <HistoryPage />
+              </ProtectedRoute>
+            } 
+          />
           
           {/* Catch-all route for 404 */}
           <Route path="*" element={<h1>404 - Page Not Found</h1>} />

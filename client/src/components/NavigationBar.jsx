@@ -1,14 +1,15 @@
 import React from 'react';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const NavigationBar = () => {
-    // We will replace this with real authentication state later
-    const isAuthenticated = false; 
+    const { isAuthenticated, logout } = useAuth();
+    const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Logic to handle user logout will go here
-        console.log("User logged out");
+        logout();
+        navigate('/login');
     };
 
     return (
@@ -24,7 +25,7 @@ const NavigationBar = () => {
                             <>
                                 <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
                                 <Nav.Link as={Link} to="/history">History</Nav.Link>
-                                <Button variant="outline-light" onClick={handleLogout}>Logout</Button>
+                                <Button variant="outline-light" onClick={handleLogout} size="sm">Logout</Button>
                             </>
                         ) : (
                             <>
