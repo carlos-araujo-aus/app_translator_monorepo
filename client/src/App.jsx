@@ -8,10 +8,14 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import HistoryPage from './pages/HistoryPage';
 
+
+// Import the new component
+import NavigationBar from './components/NavigationBar';
+
 function App() {
   return (
     <>
-      {/* We will add the NavigationBar component here later */}
+      <NavigationBar />
       <Container className="mt-4">
         <Routes>
           {/* Public Routes */}
