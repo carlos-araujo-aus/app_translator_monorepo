@@ -31,7 +31,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 } // Limit of 10MB for the file
+    limits: { fileSize: 5 * 1024 * 1024 } // Limit of 5MB for the file
 });
 
 
@@ -46,6 +46,17 @@ router.post('/upload', requireAuth, upload.single('audio'), async (req, res) => 
     }
 
     try {
+        // --- NEW: Check user's transcript count ---
+        const userId = req.user.id;
+        const transcriptCount = await Transcript.countDocuments({ userId: userId });
+
+        if (transcriptCount >= 5) {
+            // If limit is reached, delete the temporary file and return an error
+            fs.unlinkSync(req.file.path); 
+            return res.status(403).json({ message: 'You have reached the maximum limit of 5 transcriptions.' });
+        }
+        // --- END OF NEW LOGIC ---
+
         console.log(`File received: ${req.file.path}. Initiating transcription...`);
         
         // 1. Call our transcription service

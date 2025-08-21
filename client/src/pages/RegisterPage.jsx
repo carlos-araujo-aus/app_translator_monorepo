@@ -32,9 +32,9 @@ const RegisterPage = () => {
 
     return (
          <Container>
-            <Row className="justify-content-md-center">
-                <Col xs={12} md={6} lg={4}>
-                    <Card className="p-4 mt-5">
+            <Row className="justify-content-center">
+                <Col md={8} lg={6} xl={5}>
+                    <Card className="shadow-sm p-4 mt-5">
                         <Card.Body>
                             <h2 className="text-center mb-4">Register</h2>
                             {error && <Alert variant="danger">{error}</Alert>}

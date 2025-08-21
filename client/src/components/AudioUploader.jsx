@@ -12,8 +12,8 @@ const AudioUploader = ({ onTranscriptionComplete }) => {
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
-            if (file.size > 10 * 1024 * 1024) {
-                setError('File is too large. Maximum size is 10MB.');
+            if (file.size > 5 * 1024 * 1024) {
+                setError('File is too large. Maximum size is 5MB.');
                 setSelectedFile(null);
                 return;
             }

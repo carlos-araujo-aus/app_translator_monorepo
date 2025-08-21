@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useReactMediaRecorder } from 'react-media-recorder';
 import { Button, Alert, Badge, Spinner } from 'react-bootstrap';
 import { uploadAudio } from '../services/api';
@@ -6,6 +6,8 @@ import { uploadAudio } from '../services/api';
 const AudioRecorder = ({ onTranscriptionComplete, onTranscriptionError }) => {
     const [isTranscribing, setIsTranscribing] = useState(false);
     const [error, setError] = useState('');
+    // NEW: State to hold the countdown value
+    const [countdown, setCountdown] = useState(15);
 
     const {
         status,
@@ -17,6 +19,40 @@ const AudioRecorder = ({ onTranscriptionComplete, onTranscriptionError }) => {
         blobPropertyBag: { type: 'audio/wav' }
     });
 
+    const intervalRef = useRef(null); // Ref to hold the interval ID
+
+    // This effect will manage the countdown timer
+    useEffect(() => {
+        // Only run the timer if the status is 'recording'
+        if (status === 'recording') {
+            // Start a new interval
+            intervalRef.current = setInterval(() => {
+                setCountdown(prevCountdown => {
+                    if (prevCountdown <= 1) {
+                        // When countdown reaches 0, stop recording and clear the interval
+                        clearInterval(intervalRef.current);
+                        stopRecording();
+                        return 0;
+                    }
+                    return prevCountdown - 1;
+                });
+            }, 1000); // Run every second
+        } else {
+            // If status is not 'recording', clear any existing interval and reset countdown
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+            setCountdown(15); // Reset for the next recording
+        }
+
+        // This is a cleanup function that runs when the component unmounts or the effect re-runs
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, [status, stopRecording]); // The effect depends on 'status' and 'stopRecording'
+
     const handleTranscribe = async () => {
         if (!mediaBlobUrl) {
             setError('No recording available to transcribe.');
@@ -26,20 +62,12 @@ const AudioRecorder = ({ onTranscriptionComplete, onTranscriptionError }) => {
         setError('');
         
         try {
-            // 1. Fetch the blob data from the temporary URL
             const audioBlob = await fetch(mediaBlobUrl).then(res => res.blob());
-            
-            // 2. Create a File object from the blob
             const audioFile = new File([audioBlob], "recording.wav", { type: "audio/wav" });
-
-            // 3. Use FormData to send the file
             const formData = new FormData();
             formData.append('audio', audioFile);
-
-            // 4. Call the API service
             const response = await uploadAudio(formData);
 
-            // 5. Notify the parent component
             if (onTranscriptionComplete) {
                 onTranscriptionComplete(response.data.transcript);
             }
@@ -61,11 +89,21 @@ const AudioRecorder = ({ onTranscriptionComplete, onTranscriptionError }) => {
 
     return (
         <div>
-            <div className="d-flex justify-content-between align-items-center mb-3">
+            <Alert variant="info">
+                Audio recordings have a maximum duration of 15 seconds.
+            </Alert>
+
+            <div className="d-flex justify-content-between align-items-center my-3">
                 <p className="mb-0">Status:</p>
-                <Badge pill bg={status === 'recording' ? 'danger' : 'secondary'} className="fs-6">
-                    {status}
-                </Badge>
+                <div>
+                    {/* NEW: Display the countdown timer when recording */}
+                    {status === 'recording' && (
+                        <span className="me-2 fw-bold text-danger">{countdown}s</span>
+                    )}
+                    <Badge pill bg={status === 'recording' ? 'danger' : 'secondary'} className="fs-6">
+                        {status}
+                    </Badge>
+                </div>
             </div>
             {mediaBlobUrl && (
                 <div className="mb-3">

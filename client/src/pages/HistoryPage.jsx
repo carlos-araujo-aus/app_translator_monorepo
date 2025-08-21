@@ -51,29 +51,31 @@ const HistoryPage = () => {
         }
 
         return (
-            <ListGroup>
-                {transcripts.map((transcript) => (
+            <div className="d-flex justify-content-center py-4">
+              <div className="w-100" style={{ maxWidth: "800px" }}>
+                <ListGroup>
+                  {transcripts.map((transcript) => (
                     <ListGroup.Item key={transcript._id} className="mb-3 border rounded">
-                        <div className="d-flex w-100 justify-content-between">
-                            <h5 className="mb-1">{transcript.originalFilename}</h5>
-                            <small>{new Date(transcript.createdAt).toLocaleDateString()}</small>
-                        </div>
-                        <p className="mb-1">
-                            {transcript.transcribedText}
-                        </p>
-                        <small className="text-muted">
-                            Duration: {transcript.durationSeconds.toFixed(2)}s | 
-                            Confidence: {(transcript.confidence * 100).toFixed(1)}%
-                        </small>
+                      <div className="d-flex w-100 justify-content-between">
+                        <h5 className="mb-1">{transcript.originalFilename}</h5>
+                        <small>{new Date(transcript.createdAt).toLocaleDateString()}</small>
+                      </div>
+                      <p className="mb-1">{transcript.transcribedText}</p>
+                      <small className="text-muted">
+                        Duration: {transcript.durationSeconds.toFixed(2)}s |{" "}
+                        Confidence: {(transcript.confidence * 100).toFixed(1)}%
+                      </small>
                     </ListGroup.Item>
-                ))}
-            </ListGroup>
+                  ))}
+                </ListGroup>
+              </div>
+            </div>
         );
     };
 
     return (
         <Container>
-            <h1 className="my-4">Transcription History</h1>
+            <h1 className="mb-4 fw-bold text-center">📂Transcription History</h1>
             {renderContent()}
         </Container>
     );

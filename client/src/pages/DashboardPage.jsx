@@ -1,81 +1,74 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Alert } from 'react-bootstrap';
-
+import { Row, Col, Card, Alert } from 'react-bootstrap';
 import AudioUploader from '../components/AudioUploader';
 import AudioRecorder from '../components/AudioRecorder';
 
 const DashboardPage = () => {
-  // State to hold the latest transcription result
-  const [transcriptionResult, setTranscriptionResult] = useState(null);
-  const [error, setError] = useState('');
+    const [transcriptionResult, setTranscriptionResult] = useState(null);
+    const [error, setError] = useState('');
 
-  // This function will be passed down to the child components
-  const handleTranscriptionComplete = (transcript) => {
-      console.log("New transcription received in Dashboard:", transcript);
-      setTranscriptionResult(transcript);
-      setError(''); // Clear previous errors
-  };
+    const handleTranscriptionComplete = (transcript) => {
+        console.log("New transcription received in Dashboard:", transcript);
+        setTranscriptionResult(transcript);
+        setError(''); // Clear previous errors on new success
+    };
 
-  // This function will be passed down to handle errors from children
-  const handleTranscriptionError = (errorMessage) => {
-      setError(errorMessage);
-      setTranscriptionResult(null); // Clear previous results
-  };
+    const handleTranscriptionError = (errorMessage) => {
+        setError(errorMessage);
+        setTranscriptionResult(null); // Clear previous results on new error
+    };
 
-  return (
-    <Container>
-      <h1 className="my-4">Dashboard</h1>
-      <p>Welcome! Upload an existing audio file or record a new one to get started.</p>
-      <Row>
-        <Col md={6} className="mb-4">
-          <Card>
-            <Card.Body>
-              <Card.Title>Upload Audio File</Card.Title>
-              <Card.Text className="mb-3">
-                Select an audio file from your device (.mp3, .wav, .m4a, etc.).
-              </Card.Text>
-              <AudioUploader 
-                onTranscriptionComplete={handleTranscriptionComplete}
-                onTranscriptionError={handleTranscriptionError} // Pass error handler
-              />
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={6} className="mb-4">
-          <Card>
-            <Card.Body>
-              <Card.Title>Record Audio</Card.Title>
-               <Card.Text className="mb-3">
-                Record a short audio clip directly from your microphone.
-              </Card.Text>
-              {/* We will connect this component next */}
-              <AudioRecorder 
-                onTranscriptionComplete={handleTranscriptionComplete}
-                onTranscriptionError={handleTranscriptionError} // Pass error handler
-              />
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-            <Card>
-                <Card.Body>
-                    <Card.Title>Last Transcription Result</Card.Title>
-                    {error && <Alert variant="danger">{error}</Alert>}
-                    <div className="p-3 border rounded bg-light mt-2" style={{ minHeight: '100px' }}>
-                        {transcriptionResult ? (
-                            <p><strong>{transcriptionResult.originalFilename}:</strong> {transcriptionResult.transcribedText}</p>
-                        ) : (
-                            <p className="text-muted">Your transcription result will appear here...</p>
-                        )}
-                    </div>
-                </Card.Body>
-            </Card>
-        </Col>
-      </Row>
-    </Container>
-  );
+    const renderTranscriptionResult = () => {
+        if (!transcriptionResult) return null;
+
+        return (
+            <Alert variant="success" onClose={() => setTranscriptionResult(null)} dismissible className="mb-4">
+                <Alert.Heading>Transcription Successful!</Alert.Heading>
+                <p><strong>Original File:</strong> {transcriptionResult.originalFilename}</p>
+                <hr />
+                <p className="mb-0">{transcriptionResult.transcribedText}</p>
+            </Alert>
+        );
+    };
+
+    return (
+        // A single Row to center a single content Column, with vertical margin (my-4)
+        <Row className="justify-content-center my-4">
+          <h2 className="mb-4 fw-bold text-center">🎙️ Transcribe Your Audio</h2>
+            {/* This Column wraps ALL content, constraining its width and centering it */}
+            <Col lg={11} xl={10}>
+                {error && <Alert variant="danger" className="mb-4">{error}</Alert>}
+                {renderTranscriptionResult()}
+
+                {/* This nested Row organizes the cards within the centered column */}
+                <Row className="g-4">
+                    {/* md={6} ensures the cards are side-by-side on medium screens (tablets) and larger */}
+                    <Col md={6}>
+                        <Card className="h-100 shadow-sm">
+                            <Card.Body className="d-flex flex-column">
+                                <Card.Title className="mb-3">Upload Existing Audio File</Card.Title>
+                                <AudioUploader 
+                                    onTranscriptionComplete={handleTranscriptionComplete} 
+                                    onTranscriptionError={handleTranscriptionError}
+                                />
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col md={6}>
+                        <Card className="h-100 shadow-sm">
+                            <Card.Body className="d-flex flex-column">
+                                <Card.Title className="mb-3">Record Audio</Card.Title>
+                                <AudioRecorder 
+                                    onTranscriptionComplete={handleTranscriptionComplete} 
+                                    onTranscriptionError={handleTranscriptionError}
+                                />
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Col>
+        </Row>
+    );
 };
 
 export default DashboardPage;
