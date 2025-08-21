@@ -36,8 +36,8 @@ app.get('/', (req, res) => {
     res.send('Welcome to the Transcription API Backend!');
 });
 
-app.use('/api/auth', authRoutes);
-app.use('/api/transcripts', transcriptRoutes);
+app.use('/auth', authRoutes);
+app.use('/transcripts', transcriptRoutes);
 
 // 6. Start the Server
 app.listen(PORT, () => {
