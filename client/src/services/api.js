@@ -1,8 +1,15 @@
 import axios from 'axios';
 
-// Create an instance of axios
+// Use the environment variable for the base URL in production,
+// but fall back to a relative path for local development (which Vite will proxy).
+
+const baseURL = import.meta.env.VITE_API_BASE_URL || '/api';
+
 const api = axios.create({
-  baseURL: '/api', // The proxy will handle redirecting this to our backend
+  baseURL: baseURL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 /* 
