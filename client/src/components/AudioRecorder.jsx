@@ -93,18 +93,21 @@ const AudioRecorder = ({ onTranscriptionComplete, onTranscriptionError }) => {
                 Audio recordings have a maximum duration of 15 seconds.
             </Alert>
 
-            <div className="d-flex justify-content-between align-items-center my-3">
-                <p className="mb-0">Status:</p>
-                <div>
-                    {/* NEW: Display the countdown timer when recording */}
-                    {status === 'recording' && (
-                        <span className="me-2 fw-bold text-danger">{countdown}s</span>
-                    )}
-                    <Badge pill bg={status === 'recording' ? 'danger' : 'secondary'} className="fs-6">
-                        {status}
-                    </Badge>
+            {status !== 'idle' && (
+                <div className="d-flex justify-content-between align-items-center my-3">
+                    <p className="mb-0">Status:</p>
+                    <div>
+                        {/* NEW: Display the countdown timer when recording */}
+                        {status === 'recording' && (
+                            <span className="me-2 fw-bold text-danger">{countdown}s</span>
+                        )}
+                        <Badge pill bg={status === 'recording' ? 'danger' : 'secondary'} className="fs-6">
+                            {status}
+                        </Badge>
+                    </div>
                 </div>
-            </div>
+            )}
+
             {mediaBlobUrl && (
                 <div className="mb-3">
                     <audio src={mediaBlobUrl} controls className="w-100" />
