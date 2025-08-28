@@ -40,16 +40,6 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/transcripts', transcriptRoutes);
 
-// ELIMINA TODO ESTE BLOQUE DE CÓDIGO (DE LA LÍNEA 43 A LA 51)
-// ----------------- SERVE FRONTEND IN PRODUCTION -----------------
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(express.static(path.join(__dirname, '../client/dist')));
-//
-//   app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
-//   });
-// }
-// -----------------------------------------------------------------
 
 // 6. Start the Server
 app.listen(PORT, () => {
