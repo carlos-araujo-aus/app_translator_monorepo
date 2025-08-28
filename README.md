@@ -1,6 +1,17 @@
+
+---
+
 # AI Audio Transcription Web App
 
 A full-stack web application that allows users to upload or record audio and receive an AI-powered transcription. The application features secure user authentication and a personal history of all transcriptions.
+
+**➡️ Live Demo: https://ai-transcript-app-wigb4.ondigitalocean.app/ ⬅️**
+
+## 📸 Screenshots
+
+| User Login / Registration | Main App: Upload & Record | Transcription History |
+| :---: | :---: | :---: |
+| ![Login Page](https://raw.githubusercontent.com/carlos-araujo-aus/app_translator_monorepo/refs/heads/main/client/docs/screenshots/1a.png) | ![Main App Page](https://raw.githubusercontent.com/carlos-araujo-aus/app_translator_monorepo/refs/heads/main/client/docs/screenshots/1e.png) | ![History Page](https://raw.githubusercontent.com/carlos-araujo-aus/app_translator_monorepo/refs/heads/main/client/docs/screenshots/1f.png) |
 
 ## ✨ Features
 
@@ -10,32 +21,59 @@ A full-stack web application that allows users to upload or record audio and rec
 - **📖 Transcription History**: View a personal, chronologically sorted list of all your past transcriptions.
 - **📱 Responsive Design**: A mobile-first interface built with Bootstrap that works beautifully on any device.
 
+## 🏛️ Architecture Overview
+
+The application follows a classic client-server architecture with a third-party AI service for transcription.
+
+```mermaid
+graph TD
+    A[User's Browser] -->|React Frontend| B(Node.js/Express Backend);
+    B -->|Authentication & Data| C[(MongoDB Atlas)];
+    B -->|Audio for Transcription| D{Deepgram AI API};
+```
+
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **[React](https://reactjs.org/)**: A JavaScript library for building user interfaces.
-- **[Vite](https://vitejs.dev/)**: A blazing-fast frontend build tool.
-- **[React Router](https://reactrouter.com/)**: For client-side routing.
-- **[React Bootstrap](https://react-bootstrap.github.io/)**: For responsive UI components.
-- **[Axios](https://axios-http.com/)**: For making HTTP requests to the backend API.
-- **[react-media-recorder](https://www.npmjs.com/package/react-media-recorder)**: For handling browser-based audio recording.
+| Technology | Purpose |
+| :--- | :--- |
+| **[React](https://reactjs.org/)** | A JavaScript library for building user interfaces. |
+| **[Vite](https://vitejs.dev/)** | A blazing-fast frontend build tool. |
+| **[React Router](https://reactrouter.com/)**| For client-side routing. |
+| **[React Bootstrap](https://react-bootstrap.github.io/)**| For responsive UI components. |
+| **[Axios](https://axios-http.com/)** | For making HTTP requests to the backend API. |
+| **[react-media-recorder](https://www.npmjs.com/package/react-media-recorder)**| For handling browser-based audio recording. |
 
 ### Backend
-- **[Node.js](https://nodejs.org/)**: A JavaScript runtime environment.
-- **[Express.js](https://expressjs.com/)**: A web framework for Node.js.
-- **[MongoDB](https://www.mongodb.com/)**: A NoSQL database for storing user and transcription data.
-- **[Mongoose](https://mongoosejs.com/)**: An ODM for modeling application data.
-- **[Passport.js](https://www.passportjs.org/)**: Authentication middleware for Node.js (using JWT and Local strategies).
-- **[bcryptjs](https://www.npmjs.com/package/bcryptjs)**: For hashing user passwords.
-- **[JSON Web Token (JWT)](https://jwt.io/)**: For creating secure access tokens.
-- **[Multer](https://www.npmjs.com/package/multer)**: Middleware for handling file uploads.
-- **[Deepgram](https://deepgram.com/)**: For the AI-powered Speech-to-Text API.
+| Technology | Purpose |
+| :--- | :--- |
+| **[Node.js](https://nodejs.org/)** | A JavaScript runtime environment. |
+| **[Express.js](https://expressjs.com/)**| A web framework for Node.js. |
+| **[MongoDB](https://www.mongodb.com/)** | A NoSQL database for storing user and transcription data.|
+| **[Mongoose](https://mongoosejs.com/)** | An ODM for modeling application data. |
+| **[Passport.js](https://www.passportjs.org/)**| Authentication middleware for Node.js (using JWT and Local strategies). |
+| **[bcryptjs](https://www.npmjs.com/package/bcryptjs)**| For hashing user passwords. |
+| **[JSON Web Token (JWT)](https://jwt.io/)**| For creating secure access tokens. |
+| **[Multer](https://www.npmjs.com/package/multer)** | Middleware for handling file uploads. |
+| **[Deepgram](https://deepgram.com/)** | For the AI-powered Speech-to-Text API. |
 
 ## 📂 Project Structure
 
-The project is a monorepo with two main directories:
-- `/client`: Contains the entire React frontend application.
-- `/backend`: Contains the Node.js/Express backend server and API.
+This project is a monorepo containing two main packages:
+
+```
+/
+├── backend/        # Node.js, Express, MongoDB API
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   └── routes/
+├── client/         # React (Vite) Frontend Application
+│   ├── public/
+│   └── src/
+└── package.json    # Root package.json for managing the monorepo
+```
 
 ## 🚀 Getting Started
 
@@ -50,8 +88,8 @@ The project is a monorepo with two main directories:
 
 1.  **Clone the repository:**
     ```bash
-    git clone <your-repository-url>
-    cd APP_TRANSLATOR
+    git clone https://github.com/carlos-araujo-aus/app_translator_monorepo
+    cd app_translator_monorepo
     ```
 
 2.  **Setup the Backend:**
@@ -59,7 +97,7 @@ The project is a monorepo with two main directories:
     cd backend
     npm install
     ```
-    Create a `.env` file in the `backend` directory and add the following variables:
+    Create a `.env` file in the `backend` directory. You can use `.env.example` as a template. Fill in the required variables:
     ```env
     # Deepgram API Configuration
     DEEPGRAM_API_KEY="YOUR_DEEPGRAM_API_KEY_HERE"
@@ -69,7 +107,7 @@ The project is a monorepo with two main directories:
     MONGO_URI="YOUR_MONGODB_CONNECTION_STRING"
 
     # JWT Secret for Authentication
-    JWT_SECRET="A_VERY_LONG_AND_COMPLEX_SECRET_PHRASE"
+    JWT_SECRET="A_VERY_LONG_AND_COMPLEX_SECRET_PHRASE_FOR_SIGNING_TOKENS"
 
     # Server Configuration
     PORT=3001
@@ -80,6 +118,7 @@ The project is a monorepo with two main directories:
     cd ../client
     npm install
     ```
+    *(Note: If your frontend also requires a `.env` file, add instructions for it here.)*
 
 ### Running the Application
 
